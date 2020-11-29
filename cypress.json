@@ -1,0 +1,19 @@
+{
+"defaultCommandTimeout": 30000,
+"requestTimeout": 30000,
+"viewportWidth": 1320,
+"viewportHeight": 1060,
+
+"baseUrl": "https://github.com/",
+"joinUrlPart": "join",
+"signInUrlPart": "login",
+"signOutUrlPart": "logout",
+"twoFAUrlPart": "sessions/two-factor",
+"forgotPasswordUrlPart": "password_reset",
+
+"basePasswordField": "#password",
+"baseSubmitButton": "*[type=submit]",
+"signOutButton": "*[type=submit][value='Sign out']",
+
+"watchForFileChanges": false
+}
