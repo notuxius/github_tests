@@ -1,6 +1,10 @@
 /// <reference types="cypress" />
 
-import faker from "faker";
+import {
+  randomUsername,
+  randomUserEmail,
+  randomUserPassword,
+} from "../support/globals";
 
 import { SignInPage } from "../page_objects/sign_in_page";
 import { Header } from "../page_objects/header";
@@ -8,18 +12,11 @@ import { HomePage } from "../page_objects/home_page";
 import { JoinPage } from "../page_objects/join_page";
 import { ForgotPasswordPage } from "../page_objects/forgot_password_page";
 
+const signInPage = new SignInPage();
 const header = new Header();
 const homePage = new HomePage();
 const joinPage = new JoinPage();
-const signInPage = new SignInPage();
 const forgotPasswordPage = new ForgotPasswordPage();
-
-const randomUserName = faker.random.number() + faker.random.word();
-const randomUserEmail = faker.internet.email();
-const randomUserPassword = faker.internet.password();
-
-const signedUpUserEmail = Cypress.env().github_user_email;
-const signedUpUserPassword = Cypress.env().github_user_password;
 
 beforeEach(() => {
   cy.visit(homePage.pageUrl);
@@ -31,8 +28,8 @@ afterEach(() => {
 
 Cypress.Commands.add(
   "enterUsername",
-  (formField, userName = randomUserName) => {
-    cy.get(formField).type(userName).should("have.value", userName);
+  (formField, username = randomUsername) => {
+    cy.get(formField).type(username).should("have.value", username);
   }
 );
 
@@ -52,23 +49,6 @@ Cypress.Commands.add("submit", (submitButton) => {
   cy.get(submitButton).click();
 });
 
-Cypress.Commands.add("preSignUpUserFromHomePageAtThe", (part) => {
-  if (part == "top") {
-    cy.enterUsername(homePage.topUserNameField);
-    cy.enterEmail(homePage.topUserEmailField);
-    cy.enterPassword(homePage.topUserPasswordField);
-    cy.submit(homePage.topSubmitButton);
-  } else if (part == "bottom") {
-    cy.enterUsername(homePage.bottomUserNameField);
-    cy.enterEmail(homePage.bottomUserEmailField);
-    cy.enterPassword(homePage.bottomUserPasswordField);
-    cy.submit(homePage.bottomSubmitButton);
-  }
-
-  cy.verifyUserIsOn("JoinPage");
-  cy.get(joinPage.verifyYourAccountFrame).should("be.visible");
-});
-
 Cypress.Commands.add("ensureUserIsSignedOut", () => {
   cy.visit(homePage.pageUrl);
 
@@ -79,39 +59,6 @@ Cypress.Commands.add("ensureUserIsSignedOut", () => {
       cy.get(Cypress.config().signOutButton).click();
     }
   });
-});
-
-Cypress.Commands.add("signInUserFromSignInPage", () => {
-  cy.get(header.signInLink).click();
-  cy.verifyUserIsOn("SignInPage");
-  cy.enterEmail(signInPage.userEmailField, signedUpUserEmail);
-  cy.enterPassword(signInPage.userPasswordField, signedUpUserPassword);
-  cy.submit(signInPage.submitButton);
-});
-
-Cypress.Commands.add("sendForgotPasswordMailFromSignInPage", (email) => {
-  let userEmail = signedUpUserEmail;
-  let messageElement = forgotPasswordPage.checkYourEmailSuccessTextElement;
-  let messageText = forgotPasswordPage.checkYourEmailSuccessText;
-
-  if (email) {
-    if (email == "noEmail") {
-      userEmail = "";
-    } else if (email == "incorrectEmail") {
-      userEmail = randomUserName;
-    }
-    messageElement = forgotPasswordPage.checkYourEmailFailureTextElement;
-    messageText = forgotPasswordPage.checkYourEmailFailureText;
-  }
-
-  cy.get(header.signInLink).click();
-  cy.get(signInPage.forgotPasswordLink).click();
-  cy.verifyUserIsOn("ForgotPasswordPage");
-  if (userEmail) {
-    cy.enterEmail(forgotPasswordPage.userEmailField, userEmail);
-  }
-  cy.submit(forgotPasswordPage.submitButton);
-  cy.get(messageElement).should("have.textTrimmed", messageText);
 });
 
 Cypress.Commands.add("verifyUserIsOn", (expectedPage) => {

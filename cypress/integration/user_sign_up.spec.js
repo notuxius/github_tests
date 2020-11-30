@@ -1,10 +1,14 @@
 /// <reference types="cypress" />
 
+import { HomePage } from "../page_objects/home_page";
+
+const homePage = new HomePage();
+
 describe("user registration with random username, email and password", () => {
   it("can verify user pre-registration with top form", () => {
-    cy.preSignUpUserFromHomePageAtThe("top");
+    homePage.preSignUpUserWithFormAtThe("top");
   });
   it("can verify user pre-registration with bottom form", () => {
-    cy.preSignUpUserFromHomePageAtThe("bottom");
+    homePage.preSignUpUserWithFormAtThe("bottom");
   });
 });

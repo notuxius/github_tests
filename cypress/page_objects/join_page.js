@@ -1,3 +1,5 @@
+/// <reference types="cypress" />
+
 export class JoinPage {
   constructor() {
     this.verifyYourAccountFrame = "iframe.js-octocaptcha-frame";
