@@ -26,6 +26,8 @@ beforeEach(() => {
   cy.navigate(homePage);
 });
 
+// TODO add enterText
+// TODO check for element visiblity for typing into it
 Cypress.Commands.add("enterName", (formField, name = randomName) => {
   cy.get(formField).type(name).should("have.value", name);
 });

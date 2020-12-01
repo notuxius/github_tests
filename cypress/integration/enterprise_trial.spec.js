@@ -37,6 +37,8 @@ describe("trial enterprise", () => {
 
     cy.get(trialPage.chooseYourInstallationTypeRadioButtonsAzure).click();
     cy.get(trialPage.doYouHaveAnyOtherQuestionsRadioButtonsYes).click();
+    cy.get(trialPage.pleaseListYourQuestionsTextarea).should("be.visible");
+    cy.enterName(trialPage.pleaseListYourQuestionsTextarea);
     cy.get(trialPage.iHerebyAcceptTheTermsCheckbox).click();
 
     cy.get(verifyYourAccountFrame).should("be.visible");

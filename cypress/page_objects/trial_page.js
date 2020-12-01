@@ -17,6 +17,8 @@ export class TrialPage {
     this.doYouHaveAnyOtherQuestionsRadioButtonsYes =
       this.doYouHaveAnyOtherQuestionsRadioButtons + " " + "[value='yes']";
 
+    this.pleaseListYourQuestionsTextarea = "#questions-list";
+
     this.no = this.iHerebyAcceptTheTermsCheckbox =
       "#contact_request_agreed_to_terms";
 
