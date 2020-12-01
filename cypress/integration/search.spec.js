@@ -7,7 +7,7 @@ const searchPage = new SearchPage();
 // TODO tranform into single it with invoke or trigger of hovering
 // TODO more granular named dropdowns menus selectors checks
 describe("text search from header search field", () => {
-  it("sought text is displayed on search page", () => {
+  it("searchable text is displayed on search page", () => {
     cy.searchFromHeader("cypress");
     // cy.searchFromHeader("webdriverio");
     cy.intercept(searchPage.pageUrl).as("searchForResults");
@@ -19,8 +19,8 @@ describe("text search from header search field", () => {
         .first()
         .click()
         .should("have.attr", "href")
-        .then((href) => {
-          cy.currentPageUrl().should("include", href);
+        .then(($href) => {
+          cy.currentPageUrl().should("include", $href);
         });
     });
   });
