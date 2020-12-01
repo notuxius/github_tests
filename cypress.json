@@ -5,15 +5,7 @@
 "viewportHeight": 1060,
 
 "baseUrl": "https://github.com/",
-"joinUrlPart": "join",
-"signInUrlPart": "login",
-"signOutUrlPart": "logout",
-"twoFAUrlPart": "sessions/two-factor",
-"forgotPasswordUrlPart": "password_reset",
-
-"basePasswordField": "#password",
-"baseSubmitButton": "*[type=submit]",
-"signOutButton": "*[type=submit][value='Sign out']",
+"baseSubmitButton": "[type=submit]",
 
 "watchForFileChanges": false
 }

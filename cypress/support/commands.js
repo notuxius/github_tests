@@ -4,26 +4,22 @@ import {
   randomUsername,
   randomUserEmail,
   randomUserPassword,
+  signedUpUserEmail,
+  signedUpUserPassword,
 } from "../support/globals";
 
-import { SignInPage } from "../page_objects/sign_in_page";
 import { Header } from "../page_objects/header";
 import { HomePage } from "../page_objects/home_page";
-import { JoinPage } from "../page_objects/join_page";
-import { ForgotPasswordPage } from "../page_objects/forgot_password_page";
+import { SignInPage } from "../page_objects/sign_in_page";
+import { SignOutPage } from "../page_objects/sign_out_page";
 
-const signInPage = new SignInPage();
 const header = new Header();
 const homePage = new HomePage();
-const joinPage = new JoinPage();
-const forgotPasswordPage = new ForgotPasswordPage();
+const signInPage = new SignInPage();
+const signOutPage = new SignOutPage();
 
 beforeEach(() => {
-  cy.visit(homePage.pageUrl);
-});
-
-afterEach(() => {
-  cy.ensureUserIsSignedOut();
+  cy.navigate(homePage);
 });
 
 Cypress.Commands.add(
@@ -46,38 +42,74 @@ Cypress.Commands.add(
 
 // TODO add enter key submit if submitButton is null
 Cypress.Commands.add("submit", (submitButton) => {
-  cy.get(submitButton).click();
-});
-
-Cypress.Commands.add("ensureUserIsSignedOut", () => {
-  cy.visit(homePage.pageUrl);
-
-  cy.verifyUserIsOn("HomePage");
-  cy.get("body").then(($body) => {
-    if ($body.find(header.loggedInUserProfileDropdown).length > 0) {
-      cy.visit(Cypress.config().baseUrl + Cypress.config().signOutUrlPart);
-      cy.get(Cypress.config().signOutButton).click();
-    }
-  });
-});
-
-Cypress.Commands.add("verifyUserIsOn", (expectedPage) => {
-  let expectedPageUrl;
-
-  if (expectedPage == "HomePage") {
-    expectedPageUrl = Cypress.config().baseUrl;
-  } else if (expectedPage == "JoinPage") {
-    expectedPageUrl = joinPage.pageUrl;
-  } else if (expectedPage == "SignInPage") {
-    expectedPageUrl = signInPage.pageUrl;
-  } else if (expectedPage == "ForgotPasswordPage") {
-    expectedPageUrl = forgotPasswordPage.pageUrl;
+  if (submitButton) {
+    cy.get(submitButton).click();
+    // } else {
   }
-  cy.currentPageUrlIs(expectedPageUrl);
 });
 
-Cypress.Commands.add("currentPageUrlIs", (pageUrl) => {
+// TODO refactor
+Cypress.Commands.add(
+  "currentPageShouldBe",
+  (expectedPage, presicion = "eq") => {
+    if (presicion == "eq") {
+      cy.currentPageUrl().should("eq", expectedPage.pageUrl);
+    } else if (presicion == "fuzzy") {
+      cy.currentPageUrl().should("include", expectedPage.pageUrl);
+    }
+  }
+);
+
+Cypress.Commands.add("currentPageUrl", () => {
   cy.url().then(() => {
-    cy.url().should("eq", pageUrl);
+    return cy.url();
   });
+});
+
+Cypress.Commands.add("navigate", (page) => {
+  if (cy.currentPageUrl() != page.pageUrl) {
+    cy.visit(page.pageUrl).then(() => {
+      cy.currentPageShouldBe(page);
+    });
+  }
+});
+
+// TODO improve logout detection without spare visits to the homepage
+Cypress.Commands.add("userIsSignedIn", () => {
+  cy.navigate(homePage);
+
+  cy.get("body").then(($body) => {
+    return $body.find(header.loggedInUserProfileDropdown).length > 0;
+  });
+});
+
+Cypress.Commands.add("userShouldBeSignedIn", () => {
+  cy.userIsSignedIn().should("eq", true);
+});
+
+Cypress.Commands.add("userShouldBeSignedOut", () => {
+  cy.userIsSignedIn().should("eq", false);
+});
+
+Cypress.Commands.add("signInUser", () => {
+  cy.get(header.signInLink).click();
+  cy.currentPageShouldBe(signInPage);
+  cy.enterEmail(signInPage.userEmailField, signedUpUserEmail);
+  cy.enterPassword(signInPage.userPasswordField, signedUpUserPassword);
+  cy.submit(signInPage.submitButton);
+
+  cy.userShouldBeSignedIn();
+});
+
+// TODO add 'if signed in' condition before signing out
+Cypress.Commands.add("signOutUser", () => {
+  cy.navigate(signOutPage);
+  cy.get(signOutPage.submitButton).click();
+
+  cy.userShouldBeSignedOut();
+});
+
+Cypress.Commands.add("hoverHeaderDropdown", (headerDropdown) => {
+  cy.contains(header.dropdown, headerDropdown).click();
+  cy.get(header.dropdownMenu).should("be.visible");
 });

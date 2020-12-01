@@ -1,9 +1,11 @@
 /// <reference types="cypress" />
 
-import { JoinPage } from "../page_objects/join_page";
+import { SignUpPage } from "../page_objects/sign_up_page";
 
-const joinPage = new JoinPage();
+const signUpPage = new SignUpPage();
+/// <reference types="cypress" />
 
+// TODO
 export class HomePage {
   constructor() {
     this.topUsernameField = "#user\\[login\\]";
@@ -19,22 +21,5 @@ export class HomePage {
       ".home-hero-signup div " + Cypress.config().baseSubmitButton;
 
     this.pageUrl = Cypress.config().baseUrl;
-  }
-
-  preSignUpUserWithFormAtThe(part) {
-    if (part == "top") {
-      cy.enterUsername(this.topUsernameField);
-      cy.enterEmail(this.topUserEmailField);
-      cy.enterPassword(this.topUserPasswordField);
-      cy.submit(this.topSubmitButton);
-    } else if (part == "bottom") {
-      cy.enterUsername(this.bottomUsernameField);
-      cy.enterEmail(this.bottomUserEmailField);
-      cy.enterPassword(this.bottomUserPasswordField);
-      cy.submit(this.bottomSubmitButton);
-    }
-
-    cy.verifyUserIsOn("JoinPage");
-    cy.get(joinPage.verifyYourAccountFrame).should("be.visible");
   }
 }

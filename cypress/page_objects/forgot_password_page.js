@@ -21,7 +21,7 @@ export class ForgotPasswordPage {
       "That address is not a verified primary email or is not associated with a personal user account. Organization billing emails are only for notifications";
 
     this.pageUrl =
-      Cypress.config().baseUrl + Cypress.config().forgotPasswordUrlPart;
+      Cypress.config().baseUrl + "password_reset";
   }
 
   sendForgotPasswordMail(email = "defaultEmail") {
@@ -41,7 +41,7 @@ export class ForgotPasswordPage {
 
     cy.get(header.signInLink).click();
     cy.get(signInPage.forgotPasswordLink).click();
-    cy.verifyUserIsOn("ForgotPasswordPage");
+    cy.currentPageShouldBe(this);
     if (userEmail) {
       cy.enterEmail(this.userEmailField, userEmail);
     }
