@@ -17,10 +17,10 @@ export class Header {
     this.exploreDropdownMenuTopicsItem =
       this.dropdownMenu + " " + "[href='/topics']";
 
-    this.searchField = "[data-scoped-placeholder='Search']";
+    this.searchField = "[data-scoped-placeholder^='Search']";
     this.searchDropdown = "[data-item-type='global_search']";
 
-    this.signInLink = '[href*="/login"]';
-    this.loggedInUserProfileDropdown = '[aria-label="View profile and more"]';
+    this.signInLink = "[href^='/login']";
+    this.loggedInUserProfileDropdown = "[aria-label^='View profile']";
   }
 }

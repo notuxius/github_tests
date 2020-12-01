@@ -20,6 +20,8 @@ export class HomePage {
     this.bottomSubmitButton =
       ".home-hero-signup div " + Cypress.config().baseSubmitButton;
 
+    this.startFreeTrialButton = "[href^='/organizations']";
+
     this.pageUrl = Cypress.config().baseUrl;
   }
 }

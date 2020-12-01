@@ -5,7 +5,7 @@ import { ForgotPasswordPage } from "../page_objects/forgot_password_page";
 const forgotPasswordPage = new ForgotPasswordPage();
 
 describe("user sign in with email and password", () => {
-  it.only("user sign in with correct email and password", () => {
+  it("user sign in with correct email and password", () => {
     cy.signInUser();
     cy.signOutUser();
   });

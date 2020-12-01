@@ -116,15 +116,18 @@ Cypress.Commands.add("hoverHeaderDropdown", (headerDropdown) => {
   cy.get(header.dropdownMenu).should("be.visible");
 });
 
-Cypress.Commands.add("searchFromHeader", (term) => {
+Cypress.Commands.add("searchFromHeader", (searchTerm) => {
   cy.get(header.searchField)
     .clear()
-    .type(term)
-    .should("have.value", term)
+    .type(searchTerm)
+    .should("have.value", searchTerm)
     .click()
     .then(() => {
       cy.get(header.searchDropdown).click();
     });
 
-  cy.currentPageShouldBe(searchPage, "fuzzy");
+  cy.location("search").should(
+    "include",
+    searchPage.textSearchQueryKey + searchTerm
+  );
 });
