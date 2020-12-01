@@ -12,11 +12,13 @@ import { Header } from "../page_objects/header";
 import { HomePage } from "../page_objects/home_page";
 import { SignInPage } from "../page_objects/sign_in_page";
 import { SignOutPage } from "../page_objects/sign_out_page";
+import { SearchPage } from "../page_objects/search_page";
 
 const header = new Header();
 const homePage = new HomePage();
 const signInPage = new SignInPage();
 const signOutPage = new SignOutPage();
+const searchPage = new SearchPage();
 
 beforeEach(() => {
   cy.navigate(homePage);
@@ -40,7 +42,7 @@ Cypress.Commands.add(
   }
 );
 
-// TODO add enter key submit if submitButton is null
+// TODO add enter key submit if submitButton is null or even autodetect submit button
 Cypress.Commands.add("submit", (submitButton) => {
   if (submitButton) {
     cy.get(submitButton).click();
@@ -51,8 +53,8 @@ Cypress.Commands.add("submit", (submitButton) => {
 // TODO refactor
 Cypress.Commands.add(
   "currentPageShouldBe",
-  (expectedPage, presicion = "eq") => {
-    if (presicion == "eq") {
+  (expectedPage, presicion = "strict") => {
+    if (presicion == "strict") {
       cy.currentPageUrl().should("eq", expectedPage.pageUrl);
     } else if (presicion == "fuzzy") {
       cy.currentPageUrl().should("include", expectedPage.pageUrl);
@@ -112,4 +114,17 @@ Cypress.Commands.add("signOutUser", () => {
 Cypress.Commands.add("hoverHeaderDropdown", (headerDropdown) => {
   cy.contains(header.dropdown, headerDropdown).click();
   cy.get(header.dropdownMenu).should("be.visible");
+});
+
+Cypress.Commands.add("searchFromHeader", (term) => {
+  cy.get(header.searchField)
+    .clear()
+    .type(term)
+    .should("have.value", term)
+    .click()
+    .then(() => {
+      cy.get(header.searchDropdown).click();
+    });
+
+  cy.currentPageShouldBe(searchPage, "fuzzy");
 });
