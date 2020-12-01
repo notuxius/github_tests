@@ -1,6 +1,8 @@
 /// <reference types="cypress" />
 
-import { randomUsername, signedUpUserEmail } from "../support/globals";
+import { submitButton } from "../support/globals";
+
+import { randomName, signedUpUserEmail } from "../support/globals";
 
 import { SignInPage } from "../page_objects/sign_in_page";
 import { Header } from "../page_objects/header";
@@ -11,7 +13,7 @@ const header = new Header();
 export class ForgotPasswordPage {
   constructor() {
     this.userEmailField = "#email_field";
-    this.submitButton = Cypress.config().baseSubmitButton;
+    this.submitButton = submitButton;
 
     this.checkYourEmailSuccessParagraph = "#js-pjax-container p";
     this.checkYourEmailFailurePopup = ".flash-error div";
@@ -20,8 +22,7 @@ export class ForgotPasswordPage {
     this.checkYourEmailFailurePopupText =
       "That address is not a verified primary email or is not associated with a personal user account. Organization billing emails are only for notifications";
 
-    this.pageUrl =
-      Cypress.config().baseUrl + "password_reset";
+    this.pageUrl = Cypress.config().baseUrl + "password_reset";
   }
 
   sendForgotPasswordMail(email = "defaultEmail") {
@@ -33,7 +34,7 @@ export class ForgotPasswordPage {
       if (email == "noEmail") {
         userEmail = "";
       } else if (email == "incorrectEmail") {
-        userEmail = randomUsername;
+        userEmail = randomName;
       }
       messageElement = this.checkYourEmailFailurePopup;
       messageText = this.checkYourEmailFailurePopupText;

@@ -13,6 +13,7 @@ describe("text search from header search field", () => {
     cy.intercept(searchPage.pageUrl).as("searchForResults");
     searchPage.selectLanguage("TypeScript");
 
+    // TODO make a search page separate func
     cy.wait("@searchForResults").then(() => {
       cy.get(searchPage.searchResultsLinks)
         .first()

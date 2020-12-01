@@ -5,7 +5,7 @@
 "viewportHeight": 1060,
 
 "baseUrl": "https://github.com/",
-"baseSubmitButton": "[type=submit]",
+"baseEnterpriseUrl": "https://enterprise.github.com/",
 
 "watchForFileChanges": false
 }

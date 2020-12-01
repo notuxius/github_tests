@@ -1,9 +1,11 @@
 /// <reference types="cypress" />
 
 import {
-  randomUsername,
-  randomUserEmail,
-  randomUserPassword,
+  randomName,
+  randomEmail,
+  randomWorkEmail,
+  randomPhone,
+  randomPassword,
   signedUpUserEmail,
   signedUpUserPassword,
 } from "../support/globals";
@@ -24,21 +26,27 @@ beforeEach(() => {
   cy.navigate(homePage);
 });
 
-Cypress.Commands.add(
-  "enterUsername",
-  (formField, username = randomUsername) => {
-    cy.get(formField).type(username).should("have.value", username);
-  }
-);
+Cypress.Commands.add("enterName", (formField, name = randomName) => {
+  cy.get(formField).type(name).should("have.value", name);
+});
 
-Cypress.Commands.add("enterEmail", (formField, userEmail = randomUserEmail) => {
-  cy.get(formField).type(userEmail).should("have.value", userEmail);
+Cypress.Commands.add("enterPhone", (formField, phone = randomPhone) => {
+  cy.get(formField).type(phone).should("have.value", phone);
+});
+
+// TODO make single email gen func
+Cypress.Commands.add("enterWorkEmail", (formField, email = randomWorkEmail) => {
+  cy.get(formField).type(email).should("have.value", email);
+});
+
+Cypress.Commands.add("enterEmail", (formField, email = randomEmail) => {
+  cy.get(formField).type(email).should("have.value", email);
 });
 
 Cypress.Commands.add(
   "enterPassword",
-  (formField, userPassword = randomUserPassword) => {
-    cy.get(formField).type(userPassword).should("have.value", userPassword);
+  (formField, password = randomPassword) => {
+    cy.get(formField).type(password).should("have.value", password);
   }
 );
 
