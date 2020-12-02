@@ -73,8 +73,8 @@ Cypress.Commands.add(
 );
 
 Cypress.Commands.add("currentPageUrl", () => {
-  cy.url().then(() => {
-    return cy.url();
+  cy.url({ log: false }).then(() => {
+    return cy.url({ log: false });
   });
 });
 
